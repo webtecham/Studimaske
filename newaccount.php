@@ -6,6 +6,8 @@
 		<link rel="stylesheet" type="text/css" href="stylesheet.css">
 	</head>
 	<body>
+	
+	
 		<!----Datenbank anbindung---->
  		<?php
 		    if(isset($_POST["submit"])){
@@ -23,11 +25,16 @@
 			if($count == 0){
 			  if($_POST["pw"] == $_POST["pw2"]){
 			    //User anlegen
-			    $stmt = $mysql->prepare("INSERT INTO accounts (USERNAME, PASSWORD, EMAIL, TOKEN) VALUES (:user, :pw, :email, null)");
+			    $stmt = $mysql->prepare("INSERT INTO accounts (USERNAME, PASSWORD, EMAIL) VALUES (:user, :pw, :email)");
 			    $stmt->bindParam(":user", $_POST["username"]);
 			    $hash = password_hash($_POST["pw"], PASSWORD_BCRYPT);
 			    $stmt->bindParam(":pw", $hash);
-			    $stmt->bindParam(":email", $_POST["email"]);
+				
+				//TO DO
+				//ÜBERPRÜFUNG DAS EINE EMAIL ADRESSE ANGEGEBN WURDE
+				//ÜBERPRÜFUNG OB EMAIL THM KONTO IST
+				//ÜBERPRÜFUNG OB EMAIL EIN STUDI KONTO IST
+				$stmt->bindParam(":email", $_POST["email"]);
 			    $stmt->execute();
 			    echo "Dein Account wurde angelegt";
 			  } else {
@@ -61,7 +68,7 @@
 <div class = "Accounterstellenbox">
 	<img src="avatar.jpg" class="avatar">
 		<h1> Account erstellen </h1>
-		<form action="newaccount.php method="post">
+		<form action="newaccount.php" method="post">
 			<p>E-Mail Adresse</p>
 			<input type ="text" name="email" placeholder="E-Mail eingeben" required>
 			<p>Benutzername</p>
